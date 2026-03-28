@@ -1,2 +1,2 @@
 # dotfiles
-my config files 
+This is a repo for all my config files lol
