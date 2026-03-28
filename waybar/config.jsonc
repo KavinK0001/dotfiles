@@ -1,0 +1,63 @@
+{
+    "layer": "top",
+    "position": "top",
+    "spacing": 0, 
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": ["network", "pulseaudio", "backlight", "tray", "battery"],
+
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        "persistent-workspaces": {
+            "eDP-1": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "HDMI-A-1": [10]
+        }
+    },
+    "clock": {
+        "format": "  {:%H:%M}",
+        "format-alt": "  {:%a, %d. %b}"
+    },
+    "backlight": {
+        "device": "intel_backlight", // You can usually leave this out, but helpful if it doesn't auto-detect
+        // "format": "{icon}  {percent}%",
+        // "format-icons": ["", "", "", "", "", "", "", "", ""],
+        "format": "  {percent}%", // Static sun icon
+        "on-scroll-up": "brightnessctl set 5%+",
+        "on-scroll-down": "brightnessctl set 5%-",
+        "min-length": 6
+    },
+    "battery": {
+        "states": { "warning": 30, "critical": 15 },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "󱐋 {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-muted": "󰝟  Muted",
+        "on-click": "pavucontrol",
+        "on-click-middle": "/home/deadeyegam/.config/waybar/scripts/switch-audio-sink.sh",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+	    "scroll-step": 5,
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", "", "", ""]
+        }
+    },
+
+    "network": {
+        "format-wifi": "  {essid} ({signalStrength}%)",
+        "format-disconnected": "⚠ Disconnected"
+    },
+    "tray": {
+        "icon-size": 15,
+        "spacing": 10
+    }
+}

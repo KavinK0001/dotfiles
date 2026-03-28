@@ -1,0 +1,57 @@
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 12px;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+
+#workspaces, #clock, #network, #pulseaudio, #battery, #tray, #backlight {
+    background: rgba(43, 48, 59, 0.85);
+    color: white;
+    padding: 0 12px;
+    margin: 4px 3px;
+    border-radius: 12px;
+    border: 1px solid rgba(100, 114, 125, 0.2);
+}
+
+
+
+#workspaces button {
+    padding: 0 8px;
+    color: rgba(255, 255, 255, 0.752)
+}
+
+/* Empty workspaces are dimmed */
+#workspaces button.empty {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+#workspaces button.active {
+    background: rgba(100, 114, 125, 0.416);
+    /* color: rgba(255, 255, 255, 0.807); */
+    border-radius: 10px;
+}
+
+/* Remove the ugly red hover, replace with subtle neutral highlight */
+#workspaces button:hover {
+    background: rgba(100, 114, 125, 0.25);
+    border-radius: 10px;
+    color: white;
+}
+
+
+#battery.charging { color: #a6e3a1; }
+
+#battery.critical:not(.charging) {
+    background-color: #f38ba8;
+    animation: blink 0.5s steps(12) infinite alternate;
+}
+
+@keyframes blink {
+    to { background-color: rgba(243, 139, 168, 0.5); }
+}
