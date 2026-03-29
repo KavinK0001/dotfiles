@@ -10,3 +10,13 @@ hyprlock
 hyprpaper
 hyprsunset
 ttf-jetbrains-mono-nerd
+thunar
+wofi
+wl-clipboard
+grimblast-git
+qt6ct
+qt5ct
+kvantum
+kvantum-qt5
+galculator
+
