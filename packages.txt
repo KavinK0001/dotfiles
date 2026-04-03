@@ -1,6 +1,3 @@
-# These are the required packages for this config to run smoothly
-# Install them all with pacman using pacman -S --needed - < packages.txt
-
 foot
 hyprland
 htop

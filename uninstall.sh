@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Starting uninstallation..."
 
-# 1. Uninstall pacman packages from packages.txt
+# 1. Uninstall pacman/AUR packages from packages.txt
 PACKAGES_FILE="$SCRIPT_DIR/packages.txt"
 if [[ -f "$PACKAGES_FILE" ]]; then
     echo "Uninstalling packages listed in $PACKAGES_FILE..."
@@ -17,7 +17,11 @@ if [[ -f "$PACKAGES_FILE" ]]; then
     # We omit --noconfirm to allow the user to review what is being removed, 
     # as uninstalling packages might sometimes remove things relied upon by other apps!
     # If a silent uninstall is preferred, add --noconfirm below.
-    sudo pacman -R $(cat "$PACKAGES_FILE") || true
+    if command -v yay &> /dev/null; then
+        yay -R $(cat "$PACKAGES_FILE") || true
+    else
+        sudo pacman -R $(cat "$PACKAGES_FILE") || true
+    fi
 else
     echo "Warning: packages.txt not found in $SCRIPT_DIR!"
 fi
