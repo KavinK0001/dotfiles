@@ -16,7 +16,8 @@
     },
     "clock": {
         "format": "  {:%H:%M}",
-        "format-alt": "  {:%a, %d. %b}"
+        "format-alt": "  {:%a, %d. %b}",
+	"on-click-middle": "gsimplecal"
     },
     "backlight": {
         "device": "intel_backlight", // You can usually leave this out, but helpful if it doesn't auto-detect

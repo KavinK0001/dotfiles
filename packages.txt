@@ -19,4 +19,5 @@ qt5ct
 kvantum
 kvantum-qt5
 galculator
-
+gsimplecal
+ydotool
