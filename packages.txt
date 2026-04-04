@@ -28,3 +28,5 @@ kvantum
 kvantum-qt5
 hyprpolkitagent
 xdg-desktop-portal-hyprland
+fastfetch
+fish
