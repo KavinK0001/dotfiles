@@ -117,14 +117,19 @@ echo "GTK theme set to $GTK_THEME."
 # 7. Enable systemd services at boot
 echo "Enabling systemd services..."
 
-for SERVICE in tuned.service ly.service; do
-    if systemctl list-unit-files "$SERVICE" &>/dev/null && systemctl list-unit-files "$SERVICE" | grep -q "$SERVICE"; then
-        sudo systemctl enable "$SERVICE"
-        echo "  ✔ Enabled $SERVICE"
-    else
-        echo "  ⚠ Warning: $SERVICE not found, skipping."
-    fi
-done
+# Enable tuned
+if systemctl list-unit-files tuned.service 2>/dev/null | grep -q tuned.service; then
+    sudo systemctl enable tuned.service
+    echo "  ✔ Enabled tuned.service"
+else
+    echo "  ⚠ Warning: tuned.service not found, skipping."
+fi
+
+# Set up Ly display manager on tty1
+sudo systemctl enable ly@tty1.service
+echo "  ✔ Enabled ly@tty1.service"
+sudo systemctl disable getty@tty1.service 2>/dev/null || true
+echo "  ✔ Disabled getty@tty1.service"
 
 
 # 8. Configure Qt themes (qt5ct / qt6ct → Kvantum, Kvantum → KvAdaptaDark)
