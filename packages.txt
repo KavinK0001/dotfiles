@@ -22,10 +22,6 @@ gsimplecal
 ydotool
 swappy
 brave-bin
-qt6ct
-qt5ct
-kvantum
-kvantum-qt5
 hyprpolkitagent
 xdg-desktop-portal-hyprland
 fastfetch

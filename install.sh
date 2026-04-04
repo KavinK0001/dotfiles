@@ -114,4 +114,62 @@ fi
 
 echo "GTK theme set to $GTK_THEME."
 
-echo "Installation complete!"
+# 7. Enable systemd services at boot
+echo "Enabling systemd services..."
+
+for SERVICE in tuned.service ly.service; do
+    if systemctl list-unit-files "$SERVICE" &>/dev/null && systemctl list-unit-files "$SERVICE" | grep -q "$SERVICE"; then
+        sudo systemctl enable "$SERVICE"
+        echo "  ✔ Enabled $SERVICE"
+    else
+        echo "  ⚠ Warning: $SERVICE not found, skipping."
+    fi
+done
+
+
+# 8. Configure Qt themes (qt5ct / qt6ct → Kvantum, Kvantum → KvAdaptaDark)
+echo "Configuring Qt theme settings..."
+
+# qt5ct
+QT5CT_CONF="$HOME/.config/qt5ct/qt5ct.conf"
+mkdir -p "$(dirname "$QT5CT_CONF")"
+if [[ ! -f "$QT5CT_CONF" ]]; then
+    printf '[Appearance]\nstyle=kvantum\n' > "$QT5CT_CONF"
+elif grep -qF 'style=' "$QT5CT_CONF"; then
+    sed -i 's/^style=.*/style=kvantum/' "$QT5CT_CONF"
+else
+    sed -i '/^\[Appearance\]/a style=kvantum' "$QT5CT_CONF"
+fi
+echo "  ✔ qt5ct: style set to kvantum"
+
+# qt6ct
+QT6CT_CONF="$HOME/.config/qt6ct/qt6ct.conf"
+mkdir -p "$(dirname "$QT6CT_CONF")"
+if [[ ! -f "$QT6CT_CONF" ]]; then
+    printf '[Appearance]\nstyle=kvantum\n' > "$QT6CT_CONF"
+elif grep -qF 'style=' "$QT6CT_CONF"; then
+    sed -i 's/^style=.*/style=kvantum/' "$QT6CT_CONF"
+else
+    sed -i '/^\[Appearance\]/a style=kvantum' "$QT6CT_CONF"
+fi
+echo "  ✔ qt6ct: style set to kvantum"
+
+# Kvantum — select KvAdaptaDark theme
+KVANTUM_CONF="$HOME/.config/Kvantum/kvantum.kvconfig"
+mkdir -p "$(dirname "$KVANTUM_CONF")"
+if [[ ! -f "$KVANTUM_CONF" ]]; then
+    printf '[General]\ntheme=KvAdaptaDark\n' > "$KVANTUM_CONF"
+elif grep -qF 'theme=' "$KVANTUM_CONF"; then
+    sed -i 's/^theme=.*/theme=KvAdaptaDark/' "$KVANTUM_CONF"
+else
+    sed -i '/^\[General\]/a theme=KvAdaptaDark' "$KVANTUM_CONF"
+fi
+echo "  ✔ Kvantum: theme set to KvAdaptaDark"
+
+echo ""
+echo "══════════════════════════════════════════"
+echo " Installation complete!"
+echo " Please reboot your system for all"
+echo " changes to take effect."
+echo "   $ reboot"
+echo "══════════════════════════════════════════"
