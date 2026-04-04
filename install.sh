@@ -49,4 +49,69 @@ else
     echo "Warning: .config folder not found in $SCRIPT_DIR!"
 fi
 
+# 4. Set fish as the default login shell
+FISH_PATH="$(command -v fish)"
+if [[ -n "$FISH_PATH" ]]; then
+    if ! grep -qxF "$FISH_PATH" /etc/shells; then
+        echo "Adding $FISH_PATH to /etc/shells..."
+        echo "$FISH_PATH" | sudo tee -a /etc/shells > /dev/null
+    fi
+    echo "Setting fish as the default login shell..."
+    sudo chsh -s "$FISH_PATH" "$USER"
+    echo "Login shell changed to fish. Re-login to apply."
+else
+    echo "Warning: fish not found in PATH. Skipping shell change."
+fi
+
+# 5. Add fastfetch to fish config so it runs on every terminal open
+FISH_CONFIG="$HOME/.config/fish/config.fish"
+mkdir -p "$(dirname "$FISH_CONFIG")"
+if ! grep -qF 'fastfetch' "$FISH_CONFIG" 2>/dev/null; then
+    echo "Adding fastfetch to $FISH_CONFIG..."
+    printf '\n# Run fastfetch on terminal startup\nif status is-interactive\n    fastfetch\nend\n' >> "$FISH_CONFIG"
+else
+    echo "fastfetch is already present in $FISH_CONFIG. Skipping."
+fi
+
+# 6. Set GTK theme to Adapta-Nokto
+GTK_THEME="Adapta-Nokto"
+echo "Setting GTK theme to $GTK_THEME..."
+
+# GTK 2
+GTK2_RC="$HOME/.gtkrc-2.0"
+if grep -qF 'gtk-theme-name' "$GTK2_RC" 2>/dev/null; then
+    sed -i "s/^gtk-theme-name=.*/gtk-theme-name=\"$GTK_THEME\"/" "$GTK2_RC"
+else
+    echo "gtk-theme-name=\"$GTK_THEME\"" >> "$GTK2_RC"
+fi
+
+# GTK 3
+GTK3_SETTINGS="$HOME/.config/gtk-3.0/settings.ini"
+mkdir -p "$(dirname "$GTK3_SETTINGS")"
+if [[ ! -f "$GTK3_SETTINGS" ]]; then
+    printf '[Settings]\ngtk-theme-name=%s\n' "$GTK_THEME" > "$GTK3_SETTINGS"
+elif grep -qF 'gtk-theme-name' "$GTK3_SETTINGS"; then
+    sed -i "s/^gtk-theme-name=.*/gtk-theme-name=$GTK_THEME/" "$GTK3_SETTINGS"
+else
+    sed -i "/^\[Settings\]/a gtk-theme-name=$GTK_THEME" "$GTK3_SETTINGS"
+fi
+
+# GTK 4
+GTK4_SETTINGS="$HOME/.config/gtk-4.0/settings.ini"
+mkdir -p "$(dirname "$GTK4_SETTINGS")"
+if [[ ! -f "$GTK4_SETTINGS" ]]; then
+    printf '[Settings]\ngtk-theme-name=%s\n' "$GTK_THEME" > "$GTK4_SETTINGS"
+elif grep -qF 'gtk-theme-name' "$GTK4_SETTINGS"; then
+    sed -i "s/^gtk-theme-name=.*/gtk-theme-name=$GTK_THEME/" "$GTK4_SETTINGS"
+else
+    sed -i "/^\[Settings\]/a gtk-theme-name=$GTK_THEME" "$GTK4_SETTINGS"
+fi
+
+# Apply via gsettings for apps that use GSettings (best-effort)
+if command -v gsettings &> /dev/null; then
+    gsettings set org.gnome.desktop.interface gtk-theme "$GTK_THEME" 2>/dev/null || true
+fi
+
+echo "GTK theme set to $GTK_THEME."
+
 echo "Installation complete!"
