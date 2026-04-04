@@ -32,3 +32,4 @@ fastfetch
 fish
 adapta-gtk-theme
 nwg-look
+noto-fonts-emoji
