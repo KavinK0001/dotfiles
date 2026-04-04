@@ -187,7 +187,33 @@ else
 fi
 echo "  ✔ Kvantum: theme set to KvAdaptaDark"
 
-# 9. Apply all theme settings for the root user as well
+# 9. System-wide GTK theme (covers root apps launched via pkexec, e.g. timeshift-gtk)
+# /etc/gtk-X.0/settings.ini is read by ALL users incl. root regardless of $HOME
+echo "Writing system-wide GTK theme config (/etc/gtk-3.0 and /etc/gtk-4.0)..."
+
+for ETC_GTK in /etc/gtk-3.0/settings.ini /etc/gtk-4.0/settings.ini; do
+    sudo mkdir -p "$(dirname "$ETC_GTK")"
+    if sudo test ! -f "$ETC_GTK"; then
+        printf '[Settings]\ngtk-theme-name=%s\ngtk-icon-theme-name=%s\n' \
+            "$GTK_THEME" "$ICON_THEME" | sudo tee "$ETC_GTK" > /dev/null
+    else
+        # gtk-theme-name
+        if sudo grep -qF 'gtk-theme-name' "$ETC_GTK"; then
+            sudo sed -i "s|^gtk-theme-name=.*|gtk-theme-name=$GTK_THEME|" "$ETC_GTK"
+        else
+            sudo sed -i "/^\[Settings\]/a gtk-theme-name=$GTK_THEME" "$ETC_GTK"
+        fi
+        # gtk-icon-theme-name
+        if sudo grep -qF 'gtk-icon-theme-name' "$ETC_GTK"; then
+            sudo sed -i "s|^gtk-icon-theme-name=.*|gtk-icon-theme-name=$ICON_THEME|" "$ETC_GTK"
+        else
+            sudo sed -i "/^\[Settings\]/a gtk-icon-theme-name=$ICON_THEME" "$ETC_GTK"
+        fi
+    fi
+    echo "  ✔ $ETC_GTK updated"
+done
+
+# 10. Apply all theme settings for the root user as well
 echo "Applying theme settings for root user..."
 
 sudo bash -s -- "$GTK_THEME" "$ICON_THEME" << 'ROOTSCRIPT'
