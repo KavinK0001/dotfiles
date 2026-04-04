@@ -30,3 +30,5 @@ hyprpolkitagent
 xdg-desktop-portal-hyprland
 fastfetch
 fish
+adapta-gtk-theme
+nwg-look
