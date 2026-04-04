@@ -34,3 +34,5 @@ adapta-gtk-theme
 nwg-look
 noto-fonts-emoji
 tuned
+x86_energy_perf_policy
+ly
