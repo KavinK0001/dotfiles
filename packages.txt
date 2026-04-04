@@ -32,3 +32,4 @@ noto-fonts-emoji
 tuned
 x86_energy_perf_policy
 ly
+papirus-icon-theme
