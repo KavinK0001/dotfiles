@@ -1,5 +1,7 @@
 foot
 hyprland
+dunst
+wofi-emoji
 htop
 waybar
 hypridle
@@ -18,3 +20,11 @@ kvantum-qt5
 galculator
 gsimplecal
 ydotool
+swappy
+brave-bin
+qt6ct
+qt5ct
+kvantum
+kvantum-qt5
+hyprpolkitagent
+xdg-desktop-portal-hyprland
